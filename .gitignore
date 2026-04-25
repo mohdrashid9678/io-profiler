@@ -1,0 +1,13 @@
+# Binaries
+profiler
+bin/
+
+# OS specific
+.DS_Store
+
+# Go specific
+go.sum
+
+# Temporary files
+*.swp
+*~
