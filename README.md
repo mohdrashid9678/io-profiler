@@ -35,8 +35,12 @@ sudo bpftool btf dump file /sys/kernel/btf/vmlinux format c > bpf/vmlinux.h
 ```
 
 ### 3. Get required go package
+```bash
 go get [github.com/cilium/ebpf/cmd/bpf2go](https://github.com/cilium/ebpf/cmd/bpf2go)
-
+```
 ### 4. Using the automation script
+```bash
 chmod +x run.sh
 ./run.sh
+```
+
