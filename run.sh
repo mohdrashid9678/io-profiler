@@ -11,4 +11,4 @@ go build -o profiler
 
 echo "--- Starting Profiler (Requires Sudo) ---"
 # We use sudo -E to preserve the user's environment if needed
-sudo ./profiler
+sudo ./profiler --n 5
