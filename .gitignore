@@ -1,18 +1,18 @@
 # Binaries and Objects
 profiler
 bin/
-# *.o
-# *.so
+*.o
+*.so
 
 # Kernel Specific (Users should generate their own)
-# bpf/vmlinux.h
+bpf/vmlinux.h
 
 # Go specific
 go.sum
 
 # Generated BPF-to-Go bindings 
-# bpf_bpfel.go
-# bpf_bpfeb.go
+bpf_bpfel.go
+bpf_bpfeb.go
 
 # OS specific
 .DS_Store
