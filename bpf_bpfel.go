@@ -8,9 +8,16 @@ import (
 	_ "embed"
 	"fmt"
 	"io"
+	"structs"
 
 	"github.com/cilium/ebpf"
 )
+
+type BpfDataT struct {
+	_     structs.HostLayout
+	Bytes uint64
+	Comm  [16]int8
+}
 
 // LoadBpf returns the embedded CollectionSpec for Bpf.
 func LoadBpf() (*ebpf.CollectionSpec, error) {
@@ -54,14 +61,17 @@ type BpfSpecs struct {
 //
 // It can be passed ebpf.CollectionSpec.Assign.
 type BpfProgramSpecs struct {
-	HandleReadEnter *ebpf.ProgramSpec `ebpf:"handle_read_enter"`
+	HandleDiskReadExit *ebpf.ProgramSpec `ebpf:"handle_disk_read_exit"`
+	HandleNetRecvExit  *ebpf.ProgramSpec `ebpf:"handle_net_recv_exit"`
+	HandleNetSendExit  *ebpf.ProgramSpec `ebpf:"handle_net_send_exit"`
 }
 
 // BpfMapSpecs contains maps before they are loaded into the kernel.
 //
 // It can be passed ebpf.CollectionSpec.Assign.
 type BpfMapSpecs struct {
-	IoStats *ebpf.MapSpec `ebpf:"io_stats"`
+	DiskStats *ebpf.MapSpec `ebpf:"disk_stats"`
+	NetStats  *ebpf.MapSpec `ebpf:"net_stats"`
 }
 
 // BpfVariableSpecs contains global variables before they are loaded into the kernel.
@@ -90,12 +100,14 @@ func (o *BpfObjects) Close() error {
 //
 // It can be passed to LoadBpfObjects or ebpf.CollectionSpec.LoadAndAssign.
 type BpfMaps struct {
-	IoStats *ebpf.Map `ebpf:"io_stats"`
+	DiskStats *ebpf.Map `ebpf:"disk_stats"`
+	NetStats  *ebpf.Map `ebpf:"net_stats"`
 }
 
 func (m *BpfMaps) Close() error {
 	return _BpfClose(
-		m.IoStats,
+		m.DiskStats,
+		m.NetStats,
 	)
 }
 
@@ -109,12 +121,16 @@ type BpfVariables struct {
 //
 // It can be passed to LoadBpfObjects or ebpf.CollectionSpec.LoadAndAssign.
 type BpfPrograms struct {
-	HandleReadEnter *ebpf.Program `ebpf:"handle_read_enter"`
+	HandleDiskReadExit *ebpf.Program `ebpf:"handle_disk_read_exit"`
+	HandleNetRecvExit  *ebpf.Program `ebpf:"handle_net_recv_exit"`
+	HandleNetSendExit  *ebpf.Program `ebpf:"handle_net_send_exit"`
 }
 
 func (p *BpfPrograms) Close() error {
 	return _BpfClose(
-		p.HandleReadEnter,
+		p.HandleDiskReadExit,
+		p.HandleNetRecvExit,
+		p.HandleNetSendExit,
 	)
 }
 
